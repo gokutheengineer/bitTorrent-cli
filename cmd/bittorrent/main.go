@@ -10,23 +10,26 @@ import (
 
 func main() {
 	command := os.Args[1]
-	fmt.Println("Command:", command)
+	// fmt.Println("Command:", command)
 
 	switch command {
 	case "decode":
-		fmt.Println("Decoding...")
+		// fmt.Println("Decoding...")
 		bencodedValue := os.Args[2]
 
 		decoded, err := decodeBencode(bencodedValue)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Printf("Error (%v), decoding given input: %s", err, bencodedValue)
 			return
 		}
 
-		jsonOutput, _ := json.Marshal(decoded)
+		jsonOutput, err := json.Marshal(decoded)
+		if err != nil {
+			fmt.Printf("Error (%v), converting decoded data to JSON: %v", err, decoded)
+			return
+		}
 		fmt.Println(string(jsonOutput))
 	}
-
 }
 
 func decodeBencode(bencodedString string) (interface{}, error) {
